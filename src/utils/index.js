@@ -1,5 +1,6 @@
 import routerImg from "../assets/img/router.png";
 import endDeviceImg from "../assets/img/pc.png";
+import switchImg from "../assets/img/switch.png";
 
 //Danh sách các loại object
 export const listType = [
@@ -8,11 +9,11 @@ export const listType = [
     name: "Router",
     img: routerImg,
   },
-  // {
-  //   key: "switch",
-  //   name: "Switch",
-  //   img: switchImg,
-  // },
+  {
+    key: "switch",
+    name: "Switch",
+    img: switchImg,
+  },
   {
     key: "end-device",
     name: "End device",
@@ -25,8 +26,8 @@ export const renderIcon = (key) => {
   switch (key) {
     case "router":
       return routerImg;
-    // case "switch":
-    //   return switchImg;
+    case "switch":
+      return switchImg;
     case "end-device":
       return endDeviceImg;
     default:
@@ -151,9 +152,7 @@ export const dockerfileAlpineTemplate = (object) => {
     };
     // Render theo list service vd MySQL --> mysql-server
     const newList = object.configure?.services.map((value, index) => {
-      return `RUN apk add ${serviceObj[value]} ${
-        index !== object.configure.services.length - 1 ? "&&\\" : "" // Nếu là phần tử cuối cùng thì ko có dấu &&\
-      }`;
+      return `RUN apk add ${serviceObj[value]}`;
     });
 
     return newList.join("\n");
@@ -258,7 +257,7 @@ export const serviceNetworkTemplate = (object) => {
     ipam:
      config:
       - subnet: ${renderIP(object.IP, ".0/24")} 
-        gateway: ${renderIP(object.IP, ".1")}`;
+        gateway: ${renderIP(object.IP, ".254")}`;
   return template;
 };
 
@@ -294,7 +293,15 @@ export const renderServiceTxt = (objects) => {
       combineNetwork[renderIP(right.IP, ".x").replaceAll(".", "_")] = right;
     }
   }
+  const listNetworkE = objects
+    //Filter ra End Device để lấy các configure
+    .filter((object) => object.type === "end-device");
 
+  // Thêm vào 1 key dạng là 1_2_3_x để nếu như trùng key thì sẽ đè lên nhau và sẽ ko bị trùng khi render ra nx
+  for (let i = 0; i < listNetworkE.length; i++) {
+    const intF = listNetworkE[i].configure;
+    combineNetwork[renderIP(intF.IP, ".x").replaceAll(".", "_")] = intF;
+  }
   //Render theo từng key
   const NetworkRender = Object.keys(combineNetwork).map((key) => {
     return serviceNetworkTemplate(combineNetwork[key]);

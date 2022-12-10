@@ -84,25 +84,42 @@ const ObjectItem = ({ data }) => {
 
   //Nội dung của Pop
   const PopoverContent = () => {
-    return (
-      <div className="object-item__popover">
-        <div
-          className="object-item__popover--item object-item__popover--item-configure"
-          onClick={handleConfigure}
-        >
-          <SettingOutlined />
-          <span>Configure</span>
+    if (data.type !== "switch"){
+      return (
+        <div className="object-item__popover">
+          <div
+            className="object-item__popover--item object-item__popover--item-configure"
+            onClick={handleConfigure}
+          >
+            <SettingOutlined />
+            <span>Configure</span>
+          </div>
+        
+          <div
+            className="object-item__popover--item object-item__popover--item-delete"
+            onClick={handleDelete}
+          >
+            <DeleteOutlined />
+            <span>Delete</span>
+          </div>
         </div>
-
-        <div
-          className="object-item__popover--item object-item__popover--item-delete"
-          onClick={handleDelete}
-        >
-          <DeleteOutlined />
-          <span>Delete</span>
+      );
+    }
+    else
+    {
+      return (
+        <div className="object-item__popover">
+          
+          <div
+            className="object-item__popover--item object-item__popover--item-delete"
+            onClick={handleDelete}
+          >
+            <DeleteOutlined />
+            <span>Delete</span>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   };
 
   //Xử lý các chấm

@@ -7,6 +7,7 @@ import "./styles.scss";
 
 import { useDispatch } from "react-redux";
 import { updateObjectThunk } from "../../../redux/slices/objectSlice";
+import Input from "antd/lib/input/Input";
 
 const { Option } = Select;
 
@@ -33,6 +34,14 @@ const ConfigureDeviceModal = ({ isModalOpen, setIsModalOpen, data }) => {
   const [IPList, setIPList] = useState(
     data.configure.IP ? data.configure.IP : [null, null, null, null]
   );
+  // Port State
+  const [PortList, setPortList] = useState(
+    data.configure.Port ? data.configure.Port : [3306, 80, 53, 21]
+  );
+  // Path
+  const [filePath, setPath] = useState(
+    data.configure.Path ? data.configure.Path : ""
+  );
   const [indeterminate, setIndeterminate] = useState(true);
   const [checkAll, setCheckAll] = useState(false);
 
@@ -48,10 +57,19 @@ const ConfigureDeviceModal = ({ isModalOpen, setIsModalOpen, data }) => {
     setSubnetValue(value);
   };
 
+  const handlePathChange = (value) => {
+    setPath(value);
+  };
+
   const handleIPChange = (value, index) => {
     const newList = [...IPList];
     newList[index] = value;
     setIPList(newList);
+  };
+  const handlePortChange = (value, index) => {
+    const newList = [...PortList];
+    newList[index] = value;
+    setPortList(newList);
   };
 
   const handleSave = () => {
@@ -63,6 +81,7 @@ const ConfigureDeviceModal = ({ isModalOpen, setIsModalOpen, data }) => {
           services: checkedList,
           subnet: subnetValue,
           IP: IPList,
+          Port:PortList,
         },
       })
     );
@@ -148,7 +167,7 @@ const ConfigureDeviceModal = ({ isModalOpen, setIsModalOpen, data }) => {
           <InputNumber
             style={{ width: "60px" }}
             min={1}
-            max={254}
+            max={253}
             onChange={(value) => {
               handleIPChange(value, 3);
             }}
@@ -184,17 +203,46 @@ const ConfigureDeviceModal = ({ isModalOpen, setIsModalOpen, data }) => {
             >
               Choose All
             </Checkbox>
-          </div>
-          <div className="configure-modal__service--checkbox-gr">
-            <CheckboxGroup value={checkedList} onChange={onChange}>
-              <Row gutter={[16, 16]}>
-                {serviceOptions.map((service, index) => (
-                  <Col span={12} key={service + index}>
-                    <Checkbox value={service}>{service}</Checkbox>
-                  </Col>
-                ))}
-              </Row>
-            </CheckboxGroup>
+            
+        </div>
+        <div className="configure-modal__service--checkbox-gr">
+          <CheckboxGroup value={checkedList} onChange={onChange}>
+             <Row gutter={[16, 16]}>
+               {serviceOptions.map((service) => (
+                <Col span={12} key={service}>
+                  <Checkbox style={{ width: "75px" }} value={service}>{service}</Checkbox>
+                  {/*<InputNumber
+                    style={{ width: "130px" }} 
+                    placeholder="Port Number"
+                    min={0}
+                    onChange={(value) => {
+                      var index = 0;
+                      if (service === "HTTP")
+                        index = 1;
+                      if (service === "DNS")
+                        index = 2;
+                      if (service === "FTP")
+                        index = 3;
+                      handlePortChange(value, index);
+                    }}
+                  />*/}       
+                </Col> 
+              ))}
+            </Row>
+
+            {/*<Row gutter={[16, 16]}>
+              <h3>Path file copy to volume</h3>  
+                <Input 
+                  type="text"
+                  name="txt"
+                  style={{ width: "430px" }} 
+                  placeholder="Path to file" 
+                  onChange={(value) => {
+                    handlePathChange(value);
+                  }}
+                ></Input>
+            </Row>*/}
+          </CheckboxGroup>
           </div>
         </div>
       </div>

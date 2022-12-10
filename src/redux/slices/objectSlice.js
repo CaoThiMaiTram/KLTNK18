@@ -105,7 +105,8 @@ export const exportThunk = createAsyncThunk(
 
     objects.forEach((object) => {
       // Tạo folder tên của object
-      const zipFolder = zip.folder(`${object.name}`);
+      if (object.type !== "switch")
+        var zipFolder = zip.folder(`${object.name}`);
       // Truyền data vào template vào tạo dockerfile
       //Tạo dockerfile cho router
       if (object.type === "router") {

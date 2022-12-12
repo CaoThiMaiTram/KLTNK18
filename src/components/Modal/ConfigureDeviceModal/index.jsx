@@ -36,7 +36,7 @@ const ConfigureDeviceModal = ({ isModalOpen, setIsModalOpen, data }) => {
   );
   // Port State
   const [PortList, setPortList] = useState(
-    data.configure.Port ? data.configure.Port : [3306, 80, 53, 21]
+    data.configure.Port ? data.configure.Port : ["3306", "80", "53", "21"]
   );
   // Path
   const [filePath, setPath] = useState(
@@ -211,7 +211,7 @@ const ConfigureDeviceModal = ({ isModalOpen, setIsModalOpen, data }) => {
                {serviceOptions.map((service) => (
                 <Col span={12} key={service}>
                   <Checkbox style={{ width: "75px" }} value={service}>{service}</Checkbox>
-                  {/*<InputNumber
+                  <InputNumber
                     style={{ width: "130px" }} 
                     placeholder="Port Number"
                     min={0}
@@ -223,9 +223,9 @@ const ConfigureDeviceModal = ({ isModalOpen, setIsModalOpen, data }) => {
                         index = 2;
                       if (service === "FTP")
                         index = 3;
-                      handlePortChange(value, index);
+                      handlePortChange(value.toString(), index);
                     }}
-                  />*/}       
+                  />    
                 </Col> 
               ))}
             </Row>

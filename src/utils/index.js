@@ -82,10 +82,10 @@ RUN apt-get update &&\\
     apt-get install -y bind9 &&\\ 
     apt-get install -y systemd &&\\
     apt-get install -y vim &&\\
-    apt-get install -y ufw &&\\
+    apt-get install -y ufw
 ${renderServices()}  
 VOLUME [ "/data" ]
-WORKDIR /vpc 
+WORKDIR /vpc
 `;
   return template;
 };
@@ -128,8 +128,8 @@ RUN apt -y install curl wget vim git net-tools whois netcat-traditional pciutils
   
 RUN DEBIAN_FRONTEND=noninteractive apt -y install kali-tools-top10 exploitdb man-db dirb nikto wpscan uniscan lsof apktool dex2jar ltrace strace binwalk
 RUN apt-get -y update &&\\
-    apt-get install -y ftp &&\\
-${renderServices()}  
+    apt-get install -y ftp &&\\ 
+${renderServices()} 
 VOLUME [ "/data" ]
 WORKDIR /vpc  
 `;
@@ -173,7 +173,7 @@ RUN apk update &&\\
     apk upgrade &&\\
     apk add iputils &&\\
     apk add openrc &&\\
-    apk add lftp &&\\
+    apk add lftp
 ${renderServices()}  
 VOLUME [ "/data" ]
 WORKDIR /vpc  
@@ -203,12 +203,50 @@ RUN apk update &&\\
   return template;
 };
 
-// Tạo 1 PC template sẵn về service.txt
+// Tạo 1 PC template sẵn về service
 export const servicePCTemplate = (data, index) => {
+  const renderPort = () => {
+
+    const PortObj = {
+      MySQL: "3306",
+
+      HTTP: "80",
+
+      DNS: "53",
+
+      FTP: "21",
+
+      1: "3306",
+
+      2: "80",
+
+      3: "53",
+
+      4: "21",
+    };
+    // Render theo list Port
+    var services = data.configure.services;
+    var ports = data.configure.Port;
+    var newlist=``;
+    for (let i=0; i < services.length; i++){
+      let index;
+      if (services[i] === "MySQL") index = 0;
+      if (services[i] === "HTTP") index = 1;
+      if (services[i] === "DNS") index = 2;
+      if (services[i] === "FTP") index = 3;
+      if (PortObj[services[i]] !== ports[index]){
+        newlist += "\n";
+        newlist += `      - ${ports[index]}:${PortObj[services[i]]}`;
+      }
+      
+    }
+    return newlist;
+  }
   const template = `VPC_${index}:
     image: ${data.name?.toLowerCase()}
     volumes:
       - ./${data.name}/vpc-${index}/data:/vpc
+    ports:${renderPort()}
     build: 
       context: ./
       dockerfile: ${data.name}/dockerfile

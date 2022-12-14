@@ -134,7 +134,11 @@ const ConfigureRouterModal = ({ isModalOpen, setIsModalOpen, data }) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
+  const handleSwap = () => {
+    let SwapIP = data.configure.left;
+    data.configure.left = data.configure.right;
+    data.configure.right = SwapIP;
+  };
   const handleSave = () => {
     dispatch(
       updateObjectThunk({
@@ -201,7 +205,7 @@ const ConfigureRouterModal = ({ isModalOpen, setIsModalOpen, data }) => {
         <Button key="back" onClick={handleCancel}>
           Cancel
         </Button>,
-        <Button key="submit" type="primary" onClick={handleSave}>
+        <Button key="submit" type="primary" onClick={handleSwap}>
           Save
         </Button>,
       ]}

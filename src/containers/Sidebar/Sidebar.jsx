@@ -25,6 +25,10 @@ import {
 import { listType } from "../../utils/index";
 import { alertConfirmation } from "../../utils/alert";
 
+let indexR=1;
+let indexED=1;
+let indexSW=1;
+
 const Sidebar = () => {
   const dispatch = useDispatch();
   const { objectList } = useSelector((state) => state.objects);
@@ -91,13 +95,18 @@ const Sidebar = () => {
     }
   };
 
+
   // Xử lý lúc add
   const onAddClick = (e) => {
+    let nameobj;
+    if (e.key === "router") nameobj= "R" + indexR++;
+    if (e.key === "switch") nameobj= "SW" + indexSW++;
+    if (e.key === "end-device") nameobj= "PC" + indexED++;
     //Tạo ra 1 id ngẫu nhiên độ dài 6
     const id = uuidv4().slice(0, 6);
     const data = {
       type: e.key,
-      name: id,
+      name: nameobj,
       id,
       status: "loading",
       configure: {},

@@ -239,16 +239,16 @@ export const servicePCTemplate = (data, index) => {
         newlist += "\n";
         newlist += `      - "${ports[index]}:${PortObj[services[i]]}"`;
       }
-      
     }
-    if (newlist !== "") return `ports:${newlist}`;
+    if (newlist !== "") return `
+    ports:${newlist}`;
     return ``;
   }
   const template = `VPC_${index}:
     image: ${data.name?.toLowerCase()}
     volumes:
-      - ./${data.name}/vpc-${index}/data:/vpc
-    ${renderPort()}build: 
+      - ./${data.name}/vpc-${index}/data:/vpc${renderPort()}
+    build: 
       context: ./
       dockerfile: ${data.name}/dockerfile
     networks:

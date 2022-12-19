@@ -128,6 +128,7 @@ RUN apt -y install curl wget vim git net-tools whois netcat-traditional pciutils
   
 RUN DEBIAN_FRONTEND=noninteractive apt -y install kali-tools-top10 exploitdb man-db dirb nikto wpscan uniscan lsof apktool dex2jar ltrace strace binwalk
 RUN apt-get -y update &&\\
+    apt-get install -y iputils-ping &&\\
     apt-get install -y ftp  
 ${renderServices()} 
 VOLUME [ "/data" ]

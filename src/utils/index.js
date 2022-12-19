@@ -236,7 +236,7 @@ export const servicePCTemplate = (data, index) => {
       if (services[i] === "FTP") index = 3;
       if (PortObj[services[i]] !== ports[index]){
         newlist += "\n";
-        newlist += `      - ${ports[index]}:${PortObj[services[i]]}`;
+        newlist += `      - "${ports[index]}:${PortObj[services[i]]}"`;
       }
       
     }

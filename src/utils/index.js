@@ -241,14 +241,14 @@ export const servicePCTemplate = (data, index) => {
       }
       
     }
-    return newlist;
+    if (newlist !== "") return `ports:${newlist}`;
+    return ``;
   }
   const template = `VPC_${index}:
     image: ${data.name?.toLowerCase()}
     volumes:
       - ./${data.name}/vpc-${index}/data:/vpc
-    ports:${renderPort()}
-    build: 
+    ${renderPort()}build: 
       context: ./
       dockerfile: ${data.name}/dockerfile
     networks:

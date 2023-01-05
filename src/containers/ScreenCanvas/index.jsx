@@ -42,7 +42,7 @@ const nodeColor = (node) => {
 };
 
 const edgeOptions = {
-  animated: true,
+  animated: false,
   type: "straight",
   style: {
     stroke: "#1890ff",
